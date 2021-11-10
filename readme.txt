@@ -1,24 +1,9 @@
-1. How to setup:
+1. Introduction
+This is the code of a paper entitled ``IKAROS: An Indoor Keyword-Aware Routing System''.
 
-"Demo" is a Dynamic Web Project and also it is a Maven Project which can be run on server. We developed this project on Eclipse Java EE IDE for Web Developers, iOS system v10.15.6.
+IKAEOS is a Dynamic Web Project and also it is a Maven Project which can be run on server.  IKAROS efficiently answers the indoor top-k keyword-aware routing query (IKRQ). 
 
-Server: Apache Tomcat v9.0 
-	download link: https://tomcat.apache.org/download-90.cgi
-	Setup and Install Apache Tomcat Server in Eclipse IDE: https://crunchify.com/step-by-step-guide-to-setup-and-install-apache-tomcat-server-in-eclipse-development-environment-ide/
-
-Java: JavaSE-9
-
-Maven Dependencies: Provided by Eclipse Java EE IDE for Web Developers
-	download link: https://www.eclipse.org/downloads/packages/
-
-After setting up the environment on Eclipse, can : File -> Open Project File from System, and import the project (if it does not work, can consider following steps):
-	a) New -> Dynamic Web Project
-	b) Right click the new project -> Configure -> Convert to Maven Prject -> (then a new file pom.xml will be created)
-	c) copy the content between (include) <dependencies> </dependencies> in Demo/pom.xml to this newly created pom.xml, to the place bewtween   </build> and </project>
-	d) copy the *.java files under /src
-	e) copy the Data files, *.png, *.html, *.js, *.css under main folder.
-
-2. What does it include
+2. Data and Code
 
 2.a) Data. All *.txt files in root folder, including 
 	identityKeywordIndex.txt. Identity keywords and its corresponding index
@@ -44,9 +29,26 @@ After setting up the environment on Eclipse, can : File -> Open Project File fro
 	interact.js. Provides some functions for index.html, and have functions that send requests to Bridge, receive response from Bridge after. If you want to add/delete/adjust some functions, you can do it in this file
 
 3. Parameter Setting.
+
 3.a) Prefix address for input files, can be changed in /Utilities/FilePaths.java
-3.b) Number of floors, can be changed in /Utilities/DataGenConstant.java, public static int nFloor = ???
+3.b) Number of floors, can be changed in /Utilities/DataGenConstant.java, public static int nFloor
 3.c) Reassign shop (change the mapping between Partitions and Shops) go to algorithm_new/Algo2.java, function Algo2(), change the line "assignShop.staticAssign();" to "assignShop.randomAssign();".
+
+4. Contact
+
+Tiantian Liu (liutt@cs.aau.dk)
+Zijin Feng (zjfeng@se.cuhk.edu.hk)
+Huan Li (lihuan@cs.aau.dk)
+Hua Lu (luhua@ruc.dk)
+Please feel free to contact us if any issues. You are also welcome to open an issue through GitHub. We will continue to maintain this project.
+
+5. Citation
+You are welcome to use our code and datasets for research use, but please do not forget to cite our paper :).
+
+Zijin Feng, Tiantian Liu, Huan Li, Hua Lu, Lidan Shou and Jianliang Xu. Indoor Top-kKeyword-aware Routing Query. In ICDE, pages 1213-1224, 2020.
+Tiantian Liu, Zijin Feng, Huan Li, Hua Lu, Lidan Shou and Jianliang Xu. IKAROS: An Indoor Keyword-Aware Routing System. 
+
+
 
 	
 	
