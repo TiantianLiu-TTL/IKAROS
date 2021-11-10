@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IKAROS – Indoor Keyword-Aware Routing System</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" type="text/css" href="infowindow.css">
+    <script src="interact.js"></script>
+    <script src="domlistener.js"></script>
+
+  </head>
+
+  <body>
+   
+   <div id = "menu">
+   IKAROS – Indoor Keyword-Aware Routing System
+   </div>
+
+	<div id="browspanel">
+      <b>Floor Chooser</b> <br>
+      <button class="button button2" id="0" onclick="changeFloor(0)"><font face="verdana">FLoor-1</font></button><br>
+	  <button class="button button2" id="1" onclick="changeFloor(1)"><font face="verdana">FLoor-2</font></button><br>
+	  <button class="button button2" id="2" onclick="changeFloor(2)"><font face="verdana">FLoor-3</font></button><br>
+	  <button class="button button2" id="3" onclick="changeFloor(3)"><font face="verdana">FLoor-4</font></button><br>
+	  <button class="button button2" id="4" onclick="changeFloor(4)"><font face="verdana">FLoor-5</font></button><br>
+	  <button class="button button2" id="5" onclick="changeFloor(5)"><font face="verdana">FLoor-6</font></button><br>
+	  <button class="button button2" id="6" onclick="changeFloor(6)"><font face="verdana">FLoor-7</font></button><br>
+	  
+      <b>Shop Information</b><br>
+	  <div id = "shopInfo"></div>
+	  <br>
+	  <br>
+	  <br>
+	  
+    </div>
+    
+    <div id="querypanel">
+      
+      <b>Keyword-Aware Route Search</b> <br>
+      <!-- Location: <br>
+      <input id="place-id" type="text" placeholder="Enter Query Location" autocomplete="off"> <br> -->
+ 	  Starting Location <span class="dot_s"></span> :<br>
+      <input id="sloc" type="text" placeholder="(x, y), Floor z, Name" autocomplete="off" size="35">
+      <button id="put_sloc" value="sloc" onclick="put(this)">Put Marker</button><button id="update_put_sloc" value="sloc" onclick="update(this)">Update</button>
+      <br> <!--place-id-->
+      Ending Location <span class="dot_e"></span> :<br>
+      <input id="eloc" type="text" placeholder="(x, y), Floor z, Name" autocomplete="off" size="35">
+      <button id="put_eloc" value="eloc" onclick="put(this)">Put Marker</button><button id="update_put_eloc" value="eloc" onclick="update(this)">Update</button>
+      <br>
+      Distance Budget: <button id="changeMode" value="Mode1" onclick="changeMode(this)">Switch to ADVANCED MODE</button><br>
+      <div id="distance">
+   	      <select id="dist">
+		  <option value="1000">Very Strict</option>
+		  <option value="1500">Strict</option>
+		  <option value="2000">Medium</option>
+		  <option value="2500">Flexible</option>
+		  <option value="3000">Very Flexible</option>
+		  </select>
+      </div>
+      Keywords: <br>
+      <input id="selectKeyword" type="text"  placeholder="Enter Query Keywords" autocomplete="off" size="25">
+      <button id="input" onclick="selectKeyword()">Add Keyword</button><br>
+      Selected Keywords:
+      <div id="keywords"></div>
+      Number of Returned Path:<br>
+      <input id="numofroute" value="1" type="text" placeholder="0" autocomplete="on"> <br><br>
+      <button class="button button1" id="toe" value="toe" onclick="TOE()">TOE Search</button>
+      <button class="button button1" id="koe" value="koe" onclick="KOE()">KOE Search</button><br>
+ 
+      <b>Query Result:</b>
+      <div id ="topkresult"></div>
+    </div>
+    
+    
+	<div class="floor-container">
+	<br><br><br>
+	<div style="text-align:center;">
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	  <button id="buttons" ><img width="10" height="10" src="empty.png"/></button>
+	  <button id="up" onclick="up()"><img width="10" height="10" src="up.png"/></button>
+	  <button id="buttons"><img width="10" height="10" src="empty.png"/></button><br>
+	  <button id="left" onclick="left()"><img width="10" height="10" src="left.png"/></button>
+	  <button id="buttons"><img width="10" height="10" src="empty.png"/></button>
+	  <button id="right" onclick="right()"><img width="10" height="10" src="right.png"/></button><br>
+	  <button id="buttons"><img width="10" height="10" src="empty.png"/></button>
+	  <button id="down" onclick="down()"><img width="10" height="10" src="down.png"/></button>
+	  <button id="buttons"><img width="10" height="10" src="empty.png"/></button><br>
+	  <input type="range" id="mapSize" step="20" min="-700" max="700" orient="vertical">
+	  </div>
+	
+	
+	
+	<div id="floor">
+	  
+	  <svg viewBox=" 0 -50 1500 1500" id="floorPlan" xmlns="http://www.w3.org/2000/svg">
+	  
+				<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v0"x="0.0" y="0.0" width="288.0" height="288.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v1"x="288.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v2"x="360.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v3"x="432.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v4"x="504.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v5"x="576.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v6"x="144.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v7"x="144.0" y="360.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v8"x="144.0" y="432.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v9"x="144.0" y="504.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v10"x="144.0" y="576.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v11"x="360.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v12"x="432.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v13"x="504.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v14"x="576.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v15"x="360.0" y="432.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v16"x="360.0" y="504.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v17"x="360.0" y="576.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v18"x="576.0" y="432.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v19"x="432.0" y="576.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v20"x="576.0" y="522.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v21"x="612.0" y="522.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v22"x="522.0" y="576.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v23"x="522.0" y="612.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v24"x="288.0" y="288.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v25"x="360.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v26"x="504.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v27"x="288.0" y="360.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v28"x="288.0" y="504.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v29"x="432.0" y="432.0" width="144.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v30"x="576.0" y="504.0" width="72.0" height="18.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v31"x="504.0" y="576.0" width="18.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v32"x="1080.0" y="0.0" width="288.0" height="288.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v33"x="1008.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v34"x="936.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v35"x="864.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v36"x="792.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v37"x="720.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v38"x="1080.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v39"x="1080.0" y="360.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v40"x="1080.0" y="432.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v41"x="1080.0" y="504.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v42"x="1080.0" y="576.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v43"x="936.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v44"x="864.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v45"x="792.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v46"x="720.0" y="360.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v47"x="936.0" y="432.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v48"x="936.0" y="504.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v49"x="936.0" y="576.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v50"x="720.0" y="432.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v51"x="864.0" y="576.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v52"x="756.0" y="522.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v53"x="720.0" y="522.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v54"x="792.0" y="576.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v55"x="792.0" y="612.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v56"x="1008.0" y="288.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v57"x="864.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v58"x="720.0" y="288.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v59"x="1008.0" y="360.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v60"x="1008.0" y="504.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v61"x="792.0" y="432.0" width="144.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v62"x="720.0" y="504.0" width="72.0" height="18.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v63"x="846.0" y="576.0" width="18.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v64"x="0.0" y="1080.0" width="288.0" height="288.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v65"x="288.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v66"x="360.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v67"x="432.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v68"x="504.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v69"x="576.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v70"x="144.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v71"x="144.0" y="936.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v72"x="144.0" y="864.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v73"x="144.0" y="792.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v74"x="144.0" y="720.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v75"x="360.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v76"x="432.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v77"x="504.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v78"x="576.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v79"x="360.0" y="864.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v80"x="360.0" y="792.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v81"x="360.0" y="720.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v82"x="576.0" y="864.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v83"x="432.0" y="720.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v84"x="576.0" y="792.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v85"x="612.0" y="792.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v86"x="522.0" y="756.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v87"x="522.0" y="720.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v88"x="288.0" y="1008.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v89"x="360.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v90"x="504.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v91"x="288.0" y="864.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v92"x="288.0" y="720.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v93"x="432.0" y="792.0" width="144.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v94"x="576.0" y="846.0" width="72.0" height="18.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v95"x="504.0" y="720.0" width="18.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v96"x="1080.0" y="1080.0" width="288.0" height="288.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v97"x="1008.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v98"x="936.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v99"x="864.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v100"x="792.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v101"x="720.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v102"x="1080.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v103"x="1080.0" y="936.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v104"x="1080.0" y="864.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v105"x="1080.0" y="792.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v106"x="1080.0" y="720.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v107"x="936.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v108"x="864.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v109"x="792.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v110"x="720.0" y="936.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v111"x="936.0" y="864.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v112"x="936.0" y="792.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v113"x="936.0" y="720.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v114"x="720.0" y="864.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v115"x="864.0" y="720.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v116"x="756.0" y="792.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v117"x="720.0" y="792.0" width="36.0" height="54.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v118"x="792.0" y="756.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ecff" stroke="black" stroke-width="1">
+<rect id="v119"x="792.0" y="720.0" width="54.0" height="36.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v120"x="1008.0" y="1008.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v121"x="864.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v122"x="720.0" y="1008.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v123"x="1008.0" y="864.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v124"x="1008.0" y="720.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v125"x="792.0" y="792.0" width="144.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v126"x="720.0" y="846.0" width="72.0" height="18.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v127"x="846.0" y="720.0" width="18.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v128"x="648.0" y="288.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v129"x="648.0" y="360.0" width="72.0" height="216.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v130"x="576.0" y="576.0" width="216.0" height="216.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v131"x="648.0" y="792.0" width="72.0" height="216.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v132"x="648.0" y="1008.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v133"x="288.0" y="648.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v134"x="360.0" y="648.0" width="216.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v135"x="792.0" y="648.0" width="216.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="white" stroke="black" stroke-width="1">
+<rect id="v136"x="1008.0" y="648.0" width="72.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ffd9" stroke="black" stroke-width="1">
+<rect id="v137"x="648.0" y="144.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ffd9" stroke="black" stroke-width="1">
+<rect id="v138"x="648.0" y="1080.0" width="72.0" height="144.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ffd9" stroke="black" stroke-width="1">
+<rect id="v139"x="144.0" y="648.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#b3ffd9" stroke="black" stroke-width="1">
+<rect id="v140"x="1080.0" y="648.0" width="144.0" height="72.0" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d0"x="321.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d1"x="285.0" y="213.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d2"x="393.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d3"x="465.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d4"x="537.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d5"x="609.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d6"x="213.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d7"x="285.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d8"x="285.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d9"x="285.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d10"x="285.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d11"x="285.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d12"x="393.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d13"x="429.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d14"x="357.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d15"x="465.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d16"x="501.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d17"x="465.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d18"x="537.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d19"x="573.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d20"x="537.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d21"x="609.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d22"x="645.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d23"x="393.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d24"x="429.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d25"x="357.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d26"x="393.0" y="501.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d27"x="429.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d28"x="357.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d29"x="393.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d30"x="393.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d31"x="357.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d32"x="645.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d33"x="573.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d34"x="465.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d35"x="465.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d36"x="573.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d37"x="645.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d38"x="609.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d39"x="546.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d40"x="546.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d41"x="546.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d42"x="357.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d43"x="321.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d44"x="645.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d45"x="321.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d46"x="645.0" y="510.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d47"x="573.0" y="510.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d48"x="510.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d49"x="510.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d50"x="1041.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d51"x="1077.0" y="213.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d52"x="969.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d53"x="897.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d54"x="825.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d55"x="753.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d56"x="1149.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d57"x="1077.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d58"x="1077.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d59"x="1077.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d60"x="1077.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d61"x="1077.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d62"x="969.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d63"x="933.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d64"x="1005.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d65"x="897.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d66"x="861.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d67"x="897.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d68"x="825.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d69"x="789.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d70"x="825.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d71"x="753.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d72"x="717.0" y="393.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d73"x="969.0" y="429.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d74"x="933.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d75"x="1005.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d76"x="969.0" y="501.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d77"x="933.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d78"x="1005.0" y="537.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d79"x="969.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d80"x="969.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d81"x="1005.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d82"x="717.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d83"x="789.0" y="465.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d84"x="897.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d85"x="897.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d86"x="789.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d87"x="717.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d88"x="753.0" y="546.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d89"x="816.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d90"x="816.0" y="609.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d91"x="816.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d92"x="1005.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d93"x="1041.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d94"x="717.0" y="321.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d95"x="1041.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d96"x="717.0" y="510.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d97"x="789.0" y="510.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d98"x="852.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d99"x="852.0" y="645.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d100"x="321.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d101"x="285.0" y="1149.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d102"x="393.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d103"x="465.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d104"x="537.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d105"x="609.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d106"x="213.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d107"x="285.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d108"x="285.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d109"x="285.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d110"x="285.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d111"x="285.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d112"x="393.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d113"x="429.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d114"x="357.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d115"x="465.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d116"x="501.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d117"x="465.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d118"x="537.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d119"x="573.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d120"x="537.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d121"x="609.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d122"x="645.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d123"x="393.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d124"x="429.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d125"x="357.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d126"x="393.0" y="861.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d127"x="429.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d128"x="357.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d129"x="393.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d130"x="393.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d131"x="357.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d132"x="645.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d133"x="573.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d134"x="465.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d135"x="465.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d136"x="573.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d137"x="645.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d138"x="609.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d139"x="546.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d140"x="546.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d141"x="546.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d142"x="357.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d143"x="321.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d144"x="645.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d145"x="321.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d146"x="645.0" y="852.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d147"x="573.0" y="852.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d148"x="510.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d149"x="510.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d150"x="1041.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d151"x="1077.0" y="1149.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d152"x="969.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d153"x="897.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d154"x="825.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d155"x="753.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d156"x="1149.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d157"x="1077.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d158"x="1077.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d159"x="1077.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d160"x="1077.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d161"x="1077.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d162"x="969.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d163"x="933.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d164"x="1005.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d165"x="897.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d166"x="861.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d167"x="897.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d168"x="825.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d169"x="789.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d170"x="825.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d171"x="753.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d172"x="717.0" y="969.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d173"x="969.0" y="933.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d174"x="933.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d175"x="1005.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d176"x="969.0" y="861.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d177"x="933.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d178"x="1005.0" y="825.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d179"x="969.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d180"x="969.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d181"x="1005.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d182"x="717.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d183"x="789.0" y="897.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d184"x="897.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d185"x="897.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d186"x="789.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d187"x="717.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d188"x="753.0" y="816.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d189"x="816.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d190"x="816.0" y="753.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d191"x="816.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d192"x="1005.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d193"x="1041.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d194"x="717.0" y="1041.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d195"x="1041.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d196"x="717.0" y="852.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d197"x="789.0" y="852.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d198"x="852.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d199"x="852.0" y="717.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d200"x="681.0" y="285.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d201"x="681.0" y="357.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d202"x="681.0" y="573.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d203"x="573.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d204"x="681.0" y="789.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d205"x="681.0" y="1005.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d206"x="285.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d207"x="357.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d208"x="789.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d209"x="1005.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#0000ff" stroke="#0000ff" stroke-width="1">
+<rect id="d210"x="681.0" y="141.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d211"x="681.0" y="1077.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#0000ff" stroke="#0000ff" stroke-width="1">
+<rect id="d212"x="681.0" y="1221.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#0000ff" stroke="#0000ff" stroke-width="1">
+<rect id="d213"x="141.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="#0000ff" stroke="#0000ff" stroke-width="1">
+<rect id="d214"x="1221.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<g fill="red" stroke="red" stroke-width="1">
+<rect id="d215"x="1077.0" y="681.0" width="6" height="6" onclick="doubleclick(this, evt)"/>
+</g>
+<text id="vt0" x="0.0" y="15.0" font-family="Verdana" font-size="15" fill="#666699">V0</text>
+<text id="vt1" x="288.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V1</text>
+<text id="vt2" x="360.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V2</text>
+<text id="vt3" x="432.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V3</text>
+<text id="vt4" x="504.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V4</text>
+<text id="vt5" x="576.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V5</text>
+<text id="vt6" x="144.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V6</text>
+<text id="vt7" x="144.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V7</text>
+<text id="vt8" x="144.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V8</text>
+<text id="vt9" x="144.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V9</text>
+<text id="vt10" x="144.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V10</text>
+<text id="vt11" x="360.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V11</text>
+<text id="vt12" x="432.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V12</text>
+<text id="vt13" x="504.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V13</text>
+<text id="vt14" x="576.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V14</text>
+<text id="vt15" x="360.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V15</text>
+<text id="vt16" x="360.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V16</text>
+<text id="vt17" x="360.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V17</text>
+<text id="vt18" x="576.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V18</text>
+<text id="vt19" x="432.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V19</text>
+<text id="vt20" x="576.0" y="537.0" font-family="Verdana" font-size="15" fill="#666699">V20</text>
+<text id="vt21" x="612.0" y="537.0" font-family="Verdana" font-size="15" fill="#666699">V21</text>
+<text id="vt22" x="522.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V22</text>
+<text id="vt23" x="522.0" y="627.0" font-family="Verdana" font-size="15" fill="#666699">V23</text>
+<text id="vt24" x="288.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V24</text>
+<text id="vt25" x="360.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V25</text>
+<text id="vt26" x="504.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V26</text>
+<text id="vt27" x="288.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V27</text>
+<text id="vt28" x="288.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V28</text>
+<text id="vt29" x="432.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V29</text>
+<text id="vt30" x="576.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V30</text>
+<text id="vt31" x="504.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V31</text>
+<text id="vt32" x="1080.0" y="15.0" font-family="Verdana" font-size="15" fill="#666699">V32</text>
+<text id="vt33" x="1008.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V33</text>
+<text id="vt34" x="936.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V34</text>
+<text id="vt35" x="864.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V35</text>
+<text id="vt36" x="792.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V36</text>
+<text id="vt37" x="720.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V37</text>
+<text id="vt38" x="1080.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V38</text>
+<text id="vt39" x="1080.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V39</text>
+<text id="vt40" x="1080.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V40</text>
+<text id="vt41" x="1080.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V41</text>
+<text id="vt42" x="1080.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V42</text>
+<text id="vt43" x="936.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V43</text>
+<text id="vt44" x="864.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V44</text>
+<text id="vt45" x="792.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V45</text>
+<text id="vt46" x="720.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V46</text>
+<text id="vt47" x="936.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V47</text>
+<text id="vt48" x="936.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V48</text>
+<text id="vt49" x="936.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V49</text>
+<text id="vt50" x="720.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V50</text>
+<text id="vt51" x="864.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V51</text>
+<text id="vt52" x="756.0" y="537.0" font-family="Verdana" font-size="15" fill="#666699">V52</text>
+<text id="vt53" x="720.0" y="537.0" font-family="Verdana" font-size="15" fill="#666699">V53</text>
+<text id="vt54" x="792.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V54</text>
+<text id="vt55" x="792.0" y="627.0" font-family="Verdana" font-size="15" fill="#666699">V55</text>
+<text id="vt56" x="1008.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V56</text>
+<text id="vt57" x="864.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V57</text>
+<text id="vt58" x="720.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V58</text>
+<text id="vt59" x="1008.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V59</text>
+<text id="vt60" x="1008.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V60</text>
+<text id="vt61" x="792.0" y="447.0" font-family="Verdana" font-size="15" fill="#666699">V61</text>
+<text id="vt62" x="720.0" y="519.0" font-family="Verdana" font-size="15" fill="#666699">V62</text>
+<text id="vt63" x="846.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V63</text>
+<text id="vt64" x="0.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V64</text>
+<text id="vt65" x="288.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V65</text>
+<text id="vt66" x="360.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V66</text>
+<text id="vt67" x="432.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V67</text>
+<text id="vt68" x="504.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V68</text>
+<text id="vt69" x="576.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V69</text>
+<text id="vt70" x="144.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V70</text>
+<text id="vt71" x="144.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V71</text>
+<text id="vt72" x="144.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V72</text>
+<text id="vt73" x="144.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V73</text>
+<text id="vt74" x="144.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V74</text>
+<text id="vt75" x="360.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V75</text>
+<text id="vt76" x="432.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V76</text>
+<text id="vt77" x="504.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V77</text>
+<text id="vt78" x="576.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V78</text>
+<text id="vt79" x="360.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V79</text>
+<text id="vt80" x="360.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V80</text>
+<text id="vt81" x="360.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V81</text>
+<text id="vt82" x="576.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V82</text>
+<text id="vt83" x="432.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V83</text>
+<text id="vt84" x="576.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V84</text>
+<text id="vt85" x="612.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V85</text>
+<text id="vt86" x="522.0" y="771.0" font-family="Verdana" font-size="15" fill="#666699">V86</text>
+<text id="vt87" x="522.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V87</text>
+<text id="vt88" x="288.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V88</text>
+<text id="vt89" x="360.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V89</text>
+<text id="vt90" x="504.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V90</text>
+<text id="vt91" x="288.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V91</text>
+<text id="vt92" x="288.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V92</text>
+<text id="vt93" x="432.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V93</text>
+<text id="vt94" x="576.0" y="861.0" font-family="Verdana" font-size="15" fill="#666699">V94</text>
+<text id="vt95" x="504.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V95</text>
+<text id="vt96" x="1080.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V96</text>
+<text id="vt97" x="1008.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V97</text>
+<text id="vt98" x="936.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V98</text>
+<text id="vt99" x="864.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V99</text>
+<text id="vt100" x="792.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V100</text>
+<text id="vt101" x="720.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V101</text>
+<text id="vt102" x="1080.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V102</text>
+<text id="vt103" x="1080.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V103</text>
+<text id="vt104" x="1080.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V104</text>
+<text id="vt105" x="1080.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V105</text>
+<text id="vt106" x="1080.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V106</text>
+<text id="vt107" x="936.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V107</text>
+<text id="vt108" x="864.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V108</text>
+<text id="vt109" x="792.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V109</text>
+<text id="vt110" x="720.0" y="951.0" font-family="Verdana" font-size="15" fill="#666699">V110</text>
+<text id="vt111" x="936.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V111</text>
+<text id="vt112" x="936.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V112</text>
+<text id="vt113" x="936.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V113</text>
+<text id="vt114" x="720.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V114</text>
+<text id="vt115" x="864.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V115</text>
+<text id="vt116" x="756.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V116</text>
+<text id="vt117" x="720.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V117</text>
+<text id="vt118" x="792.0" y="771.0" font-family="Verdana" font-size="15" fill="#666699">V118</text>
+<text id="vt119" x="792.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V119</text>
+<text id="vt120" x="1008.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V120</text>
+<text id="vt121" x="864.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V121</text>
+<text id="vt122" x="720.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V122</text>
+<text id="vt123" x="1008.0" y="879.0" font-family="Verdana" font-size="15" fill="#666699">V123</text>
+<text id="vt124" x="1008.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V124</text>
+<text id="vt125" x="792.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V125</text>
+<text id="vt126" x="720.0" y="861.0" font-family="Verdana" font-size="15" fill="#666699">V126</text>
+<text id="vt127" x="846.0" y="735.0" font-family="Verdana" font-size="15" fill="#666699">V127</text>
+<text id="vt128" x="648.0" y="303.0" font-family="Verdana" font-size="15" fill="#666699">V128</text>
+<text id="vt129" x="648.0" y="375.0" font-family="Verdana" font-size="15" fill="#666699">V129</text>
+<text id="vt130" x="576.0" y="591.0" font-family="Verdana" font-size="15" fill="#666699">V130</text>
+<text id="vt131" x="648.0" y="807.0" font-family="Verdana" font-size="15" fill="#666699">V131</text>
+<text id="vt132" x="648.0" y="1023.0" font-family="Verdana" font-size="15" fill="#666699">V132</text>
+<text id="vt133" x="288.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V133</text>
+<text id="vt134" x="360.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V134</text>
+<text id="vt135" x="792.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V135</text>
+<text id="vt136" x="1008.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V136</text>
+<text id="vt137" x="648.0" y="159.0" font-family="Verdana" font-size="15" fill="#666699">V137</text>
+<text id="vt138" x="648.0" y="1095.0" font-family="Verdana" font-size="15" fill="#666699">V138</text>
+<text id="vt139" x="144.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V139</text>
+<text id="vt140" x="1080.0" y="663.0" font-family="Verdana" font-size="15" fill="#666699">V140</text>
+
+<path id="p0" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p1" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p2" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p3" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p4" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p5" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p6" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p7" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p8" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p9" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p10" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p11" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p12" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p13" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p14" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p15" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p16" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p17" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p18" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p19" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p20" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p21" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p22" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p23" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p24" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p25" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p26" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p27" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p28" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p29" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+<path id="p30" d="M 100 350 l 150 -300" stroke="black" stroke-dasharray="5,5" stroke-width="6" fill="none" style="display:none"/>
+
+<g id="marker_s" transform="translate(100 0) scale(0.15 0.15)">
+	<path style="fill:#cc00ff;" d="M256,0C156.698,0,76,80.7,76,180c0,33.6,9.302,66.301,27.001,94.501l140.797,230.414
+		c2.402,3.9,6.002,6.301,10.203,6.901c5.698,0.899,12.001-1.5,15.3-7.2l141.2-232.516C427.299,244.501,436,212.401,436,180
+		C436,80.7,355.302,0,256,0z M256,270c-50.398,0-90-40.8-90-90c0-49.501,40.499-90,90-90s90,40.499,90,90
+		C346,228.9,306.999,270,256,270z"/>
+	<path style="fill:#b800e6;" d="M256,0v90c49.501,0,90,40.499,90,90c0,48.9-39.001,90-90,90v241.991
+		c5.119,0.119,10.383-2.335,13.3-7.375L410.5,272.1c16.799-27.599,25.5-59.699,25.5-92.1C436,80.7,355.302,0,256,0z"/>
+</g>
+
+<g id="marker_e" transform="translate(0 0) scale(0.15 0.15)">
+	<path style="fill:#FD003A;" d="M256,0C156.698,0,76,80.7,76,180c0,33.6,9.302,66.301,27.001,94.501l140.797,230.414
+		c2.402,3.9,6.002,6.301,10.203,6.901c5.698,0.899,12.001-1.5,15.3-7.2l141.2-232.516C427.299,244.501,436,212.401,436,180
+		C436,80.7,355.302,0,256,0z M256,270c-50.398,0-90-40.8-90-90c0-49.501,40.499-90,90-90s90,40.499,90,90
+		C346,228.9,306.999,270,256,270z"/>
+	<path style="fill:#E50027;" d="M256,0v90c49.501,0,90,40.499,90,90c0,48.9-39.001,90-90,90v241.991
+		c5.119,0.119,10.383-2.335,13.3-7.375L410.5,272.1c16.799-27.599,25.5-59.699,25.5-92.1C436,80.7,355.302,0,256,0z"/>
+</g>
+	 
+	  </svg>
+	  
+	  </div>
+	</div>
+     
+	 <script>
+	 loadData();
+	 
+	 document.getElementById("mapSize").oninput = function(){
+		 enlargeFromRange();return false;
+	 }
+	 
+	 function changeMode(evt){
+		 var mode = evt.value;
+		 
+		 if (mode == "Mode1"){
+			 document.getElementById("changeMode").innerHTML = "Switch to SIMPLE MODE";
+			 var dom = document.getElementById("distance");
+			 var element = document.createElement("input");
+			 var element1 = document.createElement("output");
+			 
+			 element.id = "dist";
+			 element.type = "range";
+			 element.step = "10";
+			 element.min = "500";
+			 element.max = "3000";
+			 element.oninput = function(){
+				 document.getElementById("distOutput").innerHTML = document.getElementById("dist").value + " M";return false;
+			  };
+			 
+			 element1.id = "distOutput";
+			 element1.innerHTML = 500 + "M";
+			 
+			 dom.innerHTML = "";
+			 dom.appendChild(element);
+			 dom.appendChild(element1);
+			 evt.value = "Mode2";
+		 }
+		 
+		 if (mode == "Mode2"){
+			 document.getElementById("changeMode").innerHTML = "Switch to ADVANCED MODE";
+			 var dom = document.getElementById("distance");
+			 var element = document.createElement("select");
+			 var option1 = document.createElement("option");
+			 var option2 = document.createElement("option");
+			 var option3 = document.createElement("option");
+			 var option4 = document.createElement("option");
+			 var option5 = document.createElement("option");
+			 
+			 option1.value = "1000";
+			 option1.innerHTML = "Very Strict";
+			 
+			 option2.value = "1500";
+			 option2.innerHTML = "Strict";
+			 
+			 option3.value = "2000";
+			 option3.innerHTML = "Medium";
+			 
+			 option4.value = "2500";
+			 option4.innerHTML = "Flexible";
+			 
+			 option5.value = "3000";
+			 option5.innerHTML = "Very Flexible";
+			 
+			 element.id = "dist";
+			 element.onchange = function(){
+				 return false;
+			  };
+			 
+			 dom.innerHTML = "";
+			 element.appendChild(option1);
+			 element.appendChild(option2);
+			 element.appendChild(option3);
+			 element.appendChild(option4);
+			 element.appendChild(option5);
+			 dom.appendChild(element);
+			 evt.value = "Mode1";
+		 }
+	 }
+	 </script>
+	 
+  </body>
+</html>
